@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { VALID_GROUPS } from "@/types";
+import { validateRegisterInput } from "@/lib/validation";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -15,17 +16,36 @@ export default function RegisterPage() {
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (isSubmitting) return;
     setError(null);
 
-    if (!groupName) {
+    const formData = new FormData(e.currentTarget);
+    const formFullName = String(formData.get("fullName") ?? "");
+    const formUsername = String(formData.get("username") ?? "");
+    const formPassword = String(formData.get("password") ?? "");
+    const formConfirmPassword = String(formData.get("confirmPassword") ?? "");
+    const formGroupName = String(formData.get("groupName") ?? "");
+
+    if (!formGroupName) {
       setError("Selecciona tu grupo.");
       return;
     }
-    if (password !== confirmPassword) {
+    if (formPassword !== formConfirmPassword) {
       setError("Las contraseñas no coinciden.");
+      return;
+    }
+
+    const validation = validateRegisterInput({
+      fullName: formFullName,
+      username: formUsername,
+      password: formPassword,
+      confirmPassword: formConfirmPassword,
+      groupName: formGroupName,
+    });
+    if (!validation.valid) {
+      setError(validation.errors[0]?.message ?? "Datos inválidos.");
       return;
     }
 
@@ -35,11 +55,11 @@ export default function RegisterPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          fullName,
-          username,
-          password,
-          confirmPassword,
-          groupName,
+          fullName: formFullName,
+          username: formUsername,
+          password: formPassword,
+          confirmPassword: formConfirmPassword,
+          groupName: formGroupName,
         }),
       });
 
