@@ -48,7 +48,7 @@ export function validateUsername(username: unknown): string | null {
   if (normalized.length > MAX_USERNAME_LENGTH) {
     return `El usuario debe tener máximo ${MAX_USERNAME_LENGTH} caracteres.`;
   }
-  if (!/^[a-z0-9._-]+$/.test(normalized)) {
+  if (!/^[\p{L}\p{N}._-]+$/u.test(normalized)) {
     return "El usuario solo puede contener letras, números, puntos, guiones y guiones bajos.";
   }
   return null;
