@@ -75,6 +75,7 @@ export default function RegisterPage() {
           </label>
           <input
             id="fullName"
+            name="fullName"
             type="text"
             required
             autoComplete="name"
@@ -91,6 +92,7 @@ export default function RegisterPage() {
           </label>
           <input
             id="username"
+            name="username"
             type="text"
             required
             autoComplete="username"
@@ -108,6 +110,7 @@ export default function RegisterPage() {
           </label>
           <select
             id="groupName"
+            name="groupName"
             required
             className="input-field"
             value={groupName}
@@ -131,6 +134,7 @@ export default function RegisterPage() {
           </label>
           <input
             id="password"
+            name="password"
             type="password"
             required
             autoComplete="new-password"
@@ -147,6 +151,7 @@ export default function RegisterPage() {
           </label>
           <input
             id="confirmPassword"
+            name="confirmPassword"
             type="password"
             required
             autoComplete="new-password"
